@@ -20,6 +20,7 @@ for a in graph.arestas.values():
 
 print(graph)
 print("--" * 5, "\n", grafoListaAdj)
+print(len(grafoListaAdj))
 
 '''
 grafo = {'1': ['4', '3'], '4': [], '3': [], '2': []}

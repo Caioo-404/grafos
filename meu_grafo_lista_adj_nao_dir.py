@@ -92,14 +92,12 @@ class MeuGrafo(GrafoListaAdjacenciaNaoDirecionado):
         Verifica se o grafo é completo.
         :return: Um valor booleano que indica se o grafo é completo
         '''
-        
         if self.ha_paralelas() or self.ha_laco() or (len(self.vertices_nao_adjacentes()) > 0):
             return False
         return True
         #OK
 
-    def ha_ciclo(self):
-        # Retornar True caso haja um ciclo no grafo
+    def cria_grafoAdj(self):
         #Recriando o grafo como uma lista de adjacencia tipo: {'1': [], '4': [], '3': [], '2': []}
         grafoListaAdj = dict()
         for v in self.vertices:
@@ -109,10 +107,17 @@ class MeuGrafo(GrafoListaAdjacenciaNaoDirecionado):
             grafoListaAdj[a.v1.rotulo].append(a.v2.rotulo)
             grafoListaAdj[a.v2.rotulo].append(a.v1.rotulo)
 
+        return grafoListaAdj
+
+
+    def ha_ciclo(self):
+        # Retornar True caso haja um ciclo no grafo
+        
+        grafoListaAdj = self.cria_grafoAdj()
+        vertice = list(grafoListaAdj.keys())[0]
+
         #DFS para encontrar ciclo
         visitados = set()
-        vertice = list(self.arestas.keys())[0]
-
         def dfsParaCiclo(v, pai):
             visitados.add(v)
     
@@ -127,3 +132,43 @@ class MeuGrafo(GrafoListaAdjacenciaNaoDirecionado):
             return False 
         
         return dfsParaCiclo(vertice, None)
+    
+
+    def eh_arvore(self):
+        #Vejo se tem ciclo
+        if (self.ha_ciclo() == True): 
+            return False
+        
+        grafoListaAdj = self.cria_grafoAdj()
+
+        raiz = list(grafoListaAdj.keys())[0]
+        folhas = list()
+        visitados = set()
+
+        def dfsEncontraFolha(v):
+            visitados.add(v)
+            if len(grafoListaAdj[v]) == 1: 
+                folhas.append(v)
+
+            for vizin in grafoListaAdj[v]:
+                if vizin not in visitados:
+                    dfsEncontraFolha(vizin)
+        
+
+        dfsEncontraFolha(raiz)
+
+        #Vendo se tá desconexo
+        if (len(grafoListaAdj) != len(visitados)):
+            return False
+        
+        return raiz, folhas
+    
+
+    def eh_bipartido(self):
+        pass
+
+    def alcancabilidade(self):
+        pass
+
+    def menor_caminho(self):
+        pass
