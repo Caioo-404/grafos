@@ -1,4 +1,5 @@
 from bibgrafo.grafo_lista_adj_nao_dir import GrafoListaAdjacenciaNaoDirecionado
+from meu_grafo_lista_adj_nao_dir import ha_ciclo 
 
 graph = GrafoListaAdjacenciaNaoDirecionado()
 graph.adiciona_vertice("1")
@@ -9,6 +10,7 @@ graph.adiciona_vertice("2")
 graph.adiciona_aresta("a1", "1", "2")
 graph.adiciona_aresta("a2", "2", "3")
 graph.adiciona_aresta("a3", "3", "1")
+print(ha_ciclo(graph))
 
 grafoListaAdj = dict()
 for v in graph.vertices:

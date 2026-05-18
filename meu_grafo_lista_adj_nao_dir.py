@@ -123,8 +123,8 @@ class MeuGrafo(GrafoListaAdjacenciaNaoDirecionado):
     
             for vizin in grafoListaAdj[v]:
                 if vizin not in visitados:
-                    if dfsParaCiclo(vizin, v): # v pai
-                        return True
+                    if dfsParaCiclo(vizin, v): # v -> pai 
+                        return True # Volta true infinito
                     
                 elif vizin != pai:
                     return True
@@ -147,9 +147,11 @@ class MeuGrafo(GrafoListaAdjacenciaNaoDirecionado):
 
         def dfsEncontraFolha(v):
             visitados.add(v)
-            if len(grafoListaAdj[v]) == 1: 
-                folhas.append(v)
+            #Ver se é folha
+            if len(grafoListaAdj[v]) == 1 and v != raiz: 
+                folhas.append(self.adiciona_vertice(v))
 
+            #Dfs padrao
             for vizin in grafoListaAdj[v]:
                 if vizin not in visitados:
                     dfsEncontraFolha(vizin)
@@ -161,14 +163,37 @@ class MeuGrafo(GrafoListaAdjacenciaNaoDirecionado):
         if (len(grafoListaAdj) != len(visitados)):
             return False
         
-        return raiz, folhas
+        return self.get_vertice(raiz), folhas
     
 
     def eh_bipartido(self):
-        pass
 
-    def alcancabilidade(self):
-        pass
+        grafo = self.cria_grafoAdj()
+        
+        cores = dict()
 
-    def menor_caminho(self):
-        pass
+        visitados = set();
+        fila = list()
+        fila.append(list(grafo.keys())[0])
+
+        cores[fila[0]] = "branco"
+
+        while fila:
+            vertice = fila.pop(0)
+            visitados.add(vertice)
+
+            for v in grafo[vertice]:
+                if v not in visitados:
+                    if cores[vertice] == "branco":
+                        cores[v] = "preto"
+                    else:
+                        cores[v] = "branco"
+
+                    fila.append(v)
+                    visitados.add(v)
+
+                elif cores[v] == cores[vertice]:
+                    return False; 
+
+        return True
+

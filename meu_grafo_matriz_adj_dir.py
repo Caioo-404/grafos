@@ -66,3 +66,6 @@ class MeuGrafo(GrafoMatrizAdjacenciaDirecionado):
         :return: Uma lista de listas que representa a matriz de alcançabilidade de Warshall associada ao grafo
         '''
         pass
+
+    def menor_caminho(self):
+        pass
