@@ -131,7 +131,13 @@ class MeuGrafo(GrafoListaAdjacenciaNaoDirecionado):
             
             return False 
         
-        return dfsParaCiclo(vertice, None)
+        #se o grafo for desconexo
+        for vert in self.vertices:
+            if vert not in visitados:
+                if dfsParaCiclo(vertice, None):
+                    return True
+                
+        return False
     
 
     def eh_arvore(self):
@@ -149,7 +155,7 @@ class MeuGrafo(GrafoListaAdjacenciaNaoDirecionado):
             visitados.add(v)
             #Ver se é folha
             if len(grafoListaAdj[v]) == 1 and v != raiz: 
-                folhas.append(self.adiciona_vertice(v))
+                folhas.append(self.get_vertice(v))
 
             #Dfs padrao
             for vizin in grafoListaAdj[v]:
@@ -169,7 +175,7 @@ class MeuGrafo(GrafoListaAdjacenciaNaoDirecionado):
     def eh_bipartido(self):
 
         grafo = self.cria_grafoAdj()
-        
+
         cores = dict()
 
         visitados = set();
@@ -177,7 +183,7 @@ class MeuGrafo(GrafoListaAdjacenciaNaoDirecionado):
         fila.append(list(grafo.keys())[0])
 
         cores[fila[0]] = "branco"
-
+        
         while fila:
             vertice = fila.pop(0)
             visitados.add(vertice)
@@ -194,6 +200,6 @@ class MeuGrafo(GrafoListaAdjacenciaNaoDirecionado):
 
                 elif cores[v] == cores[vertice]:
                     return False; 
-
+    
         return True
 

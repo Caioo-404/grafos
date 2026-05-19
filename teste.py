@@ -1,7 +1,7 @@
 from bibgrafo.grafo_lista_adj_nao_dir import GrafoListaAdjacenciaNaoDirecionado
-from meu_grafo_lista_adj_nao_dir import ha_ciclo 
+from meu_grafo_lista_adj_nao_dir import *
 
-graph = GrafoListaAdjacenciaNaoDirecionado()
+graph = MeuGrafo()
 graph.adiciona_vertice("1")
 graph.adiciona_vertice("4")
 graph.adiciona_vertice("3")
@@ -9,9 +9,10 @@ graph.adiciona_vertice("2")
 
 graph.adiciona_aresta("a1", "1", "2")
 graph.adiciona_aresta("a2", "2", "3")
-graph.adiciona_aresta("a3", "3", "1")
-print(ha_ciclo(graph))
+graph.adiciona_aresta("a4", "3", "3")
+print(MeuGrafo.ha_ciclo(graph))
 
+'''
 grafoListaAdj = dict()
 for v in graph.vertices:
     grafoListaAdj[v.rotulo] = list()
@@ -23,6 +24,7 @@ for a in graph.arestas.values():
 print(graph)
 print("--" * 5, "\n", grafoListaAdj)
 print(len(grafoListaAdj))
+'''
 
 '''
 grafo = {'1': ['4', '3'], '4': [], '3': [], '2': []}
