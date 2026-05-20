@@ -65,7 +65,23 @@ class MeuGrafo(GrafoMatrizAdjacenciaDirecionado):
         Provê a matriz de alcançabilidade de Warshall do grafo
         :return: Uma lista de listas que representa a matriz de alcançabilidade de Warshall associada ao grafo
         '''
-        pass
+        matrizAlc = list()
+        QNTVERT = len(self.vertices)
+
+        for v in range(QNTVERT):
+            matrizAlc.append([0] * QNTVERT)
+            for a in range(QNTVERT):
+                if len(self.matriz[v][a]) > 0:
+                    matrizAlc[v][a] = 1
+
+        # i = intermediario 
+        for i in range(QNTVERT):
+            for j in range(QNTVERT):
+                if matrizAlc[j][i] == 1: 
+                    for k in range(QNTVERT):
+                        matrizAlc[j][k] = max(matrizAlc[j][k], matrizAlc[i][k])
+
+        return matrizAlc
 
     def menor_caminho(self):
         pass
