@@ -83,5 +83,25 @@ class MeuGrafo(GrafoMatrizAdjacenciaDirecionado):
 
         return matrizAlc
 
-    def menor_caminho(self):
-        pass
+
+    def menor_caminho(self, vi, vf):
+        if not(self.existe_rotulo_vertice(vi)) : raise VerticeInvalidoError(f"O vertice {vi} não está no grafo")
+        if not(self.existe_rotulo_vertice(vf)) : raise VerticeInvalidoError(f"O vertice {vf} não está no grafo")
+        
+        QNTVERT = len(self.vertices)
+
+        for i in range(QNTVERT):
+            for j in range(QNTVERT):
+                if len(self.matriz[i][j]) > 0:
+                    for a in self.matriz[i][j]:
+                        if self.matriz[i][j][a].peso < 0:
+                            raise MatrizInvalidaError("Para essa função a matriz não pode ter peso negativo")
+                        
+        visitados = set()
+        # rotulo, distancia e previous
+        # nao_visitados = list([a.rotulo, ] for a in self.vertices)
+
+
+
+                    
+        

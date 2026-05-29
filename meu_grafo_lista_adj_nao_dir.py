@@ -131,7 +131,7 @@ class MeuGrafo(GrafoListaAdjacenciaNaoDirecionado):
             
             return False 
         
-        #se o grafo for desconexo
+        #se o grafo for desconexo -> for mais de uma vez
         for vert in self.vertices:
             if vert not in visitados:
                 if dfsParaCiclo(vertice, None):
@@ -176,30 +176,31 @@ class MeuGrafo(GrafoListaAdjacenciaNaoDirecionado):
 
         grafo = self.cria_grafoAdj()
 
-        cores = dict()
-
         visitados = set();
-        fila = list()
-        fila.append(list(grafo.keys())[0])
 
-        cores[fila[0]] = "branco"
-        
-        while fila:
-            vertice = fila.pop(0)
-            visitados.add(vertice)
+        for v in grafo.keys():
+            if v not in visitados:
+                fila = list()
+                fila.append(v)
 
-            for v in grafo[vertice]:
-                if v not in visitados:
-                    if cores[vertice] == "branco":
-                        cores[v] = "preto"
-                    else:
-                        cores[v] = "branco"
+                cores = dict()
+                cores[fila[0]] = "branco"
+                
+                while fila:
+                    vertice = fila.pop(0)
+                    visitados.add(vertice)
 
-                    fila.append(v)
-                    visitados.add(v)
+                    for v in grafo[vertice]:
+                        if v not in visitados:
+                            if cores[vertice] == "branco":
+                                cores[v] = "preto"
+                            else:
+                                cores[v] = "branco"
 
-                elif cores[v] == cores[vertice]:
-                    return False; 
-    
-        return True
+                            fila.append(v)
+                            visitados.add(v)
 
+                        elif cores[v] == cores[vertice]:
+                            return False; 
+            
+                return True
