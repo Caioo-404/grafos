@@ -1,5 +1,6 @@
 from bibgrafo.grafo_matriz_adj_dir import *
 from bibgrafo.grafo_errors import *
+import heapq
 
 class MeuGrafo(GrafoMatrizAdjacenciaDirecionado):
 
@@ -85,6 +86,7 @@ class MeuGrafo(GrafoMatrizAdjacenciaDirecionado):
 
 
     def menor_caminho(self, vi, vf):
+        #vi -> Vertice inicio | vf -> Vertice final
         if not(self.existe_rotulo_vertice(vi)) : raise VerticeInvalidoError(f"O vertice {vi} não está no grafo")
         if not(self.existe_rotulo_vertice(vf)) : raise VerticeInvalidoError(f"O vertice {vf} não está no grafo")
         
@@ -96,8 +98,49 @@ class MeuGrafo(GrafoMatrizAdjacenciaDirecionado):
                     for a in self.matriz[i][j]:
                         if self.matriz[i][j][a].peso < 0:
                             raise MatrizInvalidaError("Para essa função a matriz não pode ter peso negativo")
-                        
+        
+        INF = 10 ** 9
+        grafo = self.matriz
+        # dict com o rótulo e o índice do vertice na matriz {'A': 0, 'B': 1}
+        mapa_indices = {v.rotulo: i for i, v in enumerate(self.vertices)}
+
+        # rotulo distancia
+        distancias = {no.rotulo : INF for no in self.vertices}
+        distancias[vi] = 0
+
+        antecessores = {no.rotulo : None for no in self.vertices}
         visitados = set()
+        fila = [(0, vi)]
+        
+        # dijkstra
+        while fila:
+            dist, vert = heapq.heappop(fila)
+
+            if vert in visitados:
+                continue
+
+            visitados.add(vert)
+
+            for vizinho in range(QNTVERT):
+                index_vertAtual = mapa_indices[vert]
+                #index_vertAtual = self.indice_do_vertice(self.get_vertice(vert))
+
+                if len(grafo[index_vertAtual][vizinho]) > 0 and distancias[vert] != INF:
+                    rotVizinho = self.vertices[vizinho].rotulo
+
+                    if rotVizinho in visitados:
+                        continue
+                    
+                    #indice 0 pois é um dict de arestas, mas so vou ter 1 aresta (grafo sem paralelas)
+                    aresta = list(grafo[index_vertAtual][vizinho].values())[0]
+                    nova_dist = dist + aresta.peso
+
+                    if nova_dist < distancias[rotVizinho]:
+                        distancias[rotVizinho] = nova_dist
+                        antecessores[rotVizinho] = vert
+                        heapq.heappush(fila, (nova_dist, rotVizinho))
+
+
         # rotulo, distancia e previous
         # nao_visitados = list([a.rotulo, ] for a in self.vertices)
 

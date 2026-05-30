@@ -11,7 +11,7 @@ grafo.adiciona_aresta("a2", "B", "C")
 grafo.adiciona_aresta("a3", "C", "B")
 
 print((grafo.indice_do_vertice(grafo.vertices[0])))
-print(grafo.matriz[0][1])
+print(grafo.matriz[0][0])
 print(grafo.menor_caminho("A", "B"))
 
 
