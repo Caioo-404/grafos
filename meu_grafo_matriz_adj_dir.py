@@ -99,12 +99,13 @@ class MeuGrafo(GrafoMatrizAdjacenciaDirecionado):
                         if self.matriz[i][j][a].peso < 0:
                             raise MatrizInvalidaError("Para essa função a matriz não pode ter peso negativo")
         
+        # Preparação 
         INF = 10 ** 9
         grafo = self.matriz
         # dict com o rótulo e o índice do vertice na matriz {'A': 0, 'B': 1}
         mapa_indices = {v.rotulo: i for i, v in enumerate(self.vertices)}
 
-        # rotulo distancia
+        # rotulo - distancia
         distancias = {no.rotulo : INF for no in self.vertices}
         distancias[vi] = 0
 
@@ -140,7 +141,17 @@ class MeuGrafo(GrafoMatrizAdjacenciaDirecionado):
                         antecessores[rotVizinho] = vert
                         heapq.heappush(fila, (nova_dist, rotVizinho))
 
+        # Fazendo lista com menor caminho vi - vf
+        menor_vi_vf = list(vf)
+        aux = antecessores[vf]
 
+        while aux != None:
+            menor_vi_vf.append(aux)
+            aux = antecessores[aux]
+        
+        menor_vi_vf.reverse()
+
+        return menor_vi_vf, distancias[vf]
         # rotulo, distancia e previous
         # nao_visitados = list([a.rotulo, ] for a in self.vertices)
 

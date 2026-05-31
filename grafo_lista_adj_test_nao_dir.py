@@ -194,3 +194,12 @@ class TestGrafo(unittest.TestCase):
         self.assertFalse((self.g_d.eh_completo()))
         self.assertFalse((self.g_d2.eh_completo()))
 
+    def test_ha_ciclo(self):
+        pass
+
+    def test_eh_arvore(self):
+        pass
+
+    def test_eh_bipartido(self):
+        pass
+

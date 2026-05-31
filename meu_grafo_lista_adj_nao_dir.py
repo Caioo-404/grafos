@@ -114,7 +114,7 @@ class MeuGrafo(GrafoListaAdjacenciaNaoDirecionado):
         # Retornar True caso haja um ciclo no grafo
         
         grafoListaAdj = self.cria_grafoAdj()
-        vertice = list(grafoListaAdj.keys())[0]
+        #vertice = list(grafoListaAdj.keys())[0]
 
         #DFS para encontrar ciclo
         visitados = set()
@@ -133,8 +133,8 @@ class MeuGrafo(GrafoListaAdjacenciaNaoDirecionado):
         
         #se o grafo for desconexo -> for mais de uma vez
         for vert in self.vertices:
-            if vert not in visitados:
-                if dfsParaCiclo(vertice, None):
+            if vert.rotulo not in visitados:
+                if dfsParaCiclo(vert.rotulo, None):
                     return True
                 
         return False

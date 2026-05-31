@@ -75,6 +75,82 @@ class TestGrafo(unittest.TestCase):
         self.g_e.adiciona_aresta('9', 'E', 'A')
         self.g_e.adiciona_aresta('11', 'E', 'B')
 
+        #Grafo desconexo
+        self.g_d3 = MeuGrafo()
+        self.g_d3.adiciona_vertice("A")
+        self.g_d3.adiciona_vertice("B")
+        self.g_d3.adiciona_vertice("C")
+        self.g_d3.adiciona_vertice("D")
+        self.g_d3.adiciona_vertice("E")
+        self.g_d3.adiciona_aresta('a1', 'A', 'B')
+        self.g_d3.adiciona_aresta('a2', 'B', 'A')
+        self.g_d3.adiciona_aresta('a3', 'C', 'D')
+        self.g_d3.adiciona_aresta('a4', 'E', 'D')
+        self.g_d3.adiciona_aresta('a6', 'D', 'E')
+        self.g_d3.adiciona_aresta('a5', 'E', 'C')
+
+        #Grafo completo
+        self.g_cc = MeuGrafo()
+        self.g_cc.adiciona_vertice("A")
+        self.g_cc.adiciona_vertice("B")
+        self.g_cc.adiciona_vertice("C")
+        self.g_cc.adiciona_vertice("D")
+        self.g_cc.adiciona_aresta('a1', 'A', 'B')
+        self.g_cc.adiciona_aresta('a2', 'A', 'C')
+        self.g_cc.adiciona_aresta('a3', 'A', 'D')
+        self.g_cc.adiciona_aresta('a4', 'B', 'A')
+        self.g_cc.adiciona_aresta('a5', 'B', 'C')
+        self.g_cc.adiciona_aresta('a6', 'B', 'D')
+        self.g_cc.adiciona_aresta('a7', 'C', 'A')
+        self.g_cc.adiciona_aresta('a8', 'C', 'B')
+        self.g_cc.adiciona_aresta('a9', 'C', 'D')
+        self.g_cc.adiciona_aresta('aa', 'D', 'A')
+        self.g_cc.adiciona_aresta('ab', 'D', 'B')
+        self.g_cc.adiciona_aresta('ac', 'D', 'C')
+
+        # Grafo sem aresta
+        self.g_sa = MeuGrafo()
+        self.g_sa.adiciona_vertice("A")
+        self.g_sa.adiciona_vertice("B")
+        self.g_sa.adiciona_vertice("C")
+
+        # Grafo ciclo dir
+        self.g_cd = MeuGrafo()
+        self.g_cd.adiciona_vertice("A")
+        self.g_cd.adiciona_vertice("B")
+        self.g_cd.adiciona_vertice("C")
+        self.g_cd.adiciona_aresta('a1', 'A', 'B')
+        self.g_cd.adiciona_aresta('a2', 'B', 'C')
+        self.g_cd.adiciona_aresta('a3', 'C', 'A')
+
+
+        # Grafo ponderado
+        self.g_f = MeuGrafo()
+        self.g_f.adiciona_vertice("A")
+        self.g_f.adiciona_vertice("B")
+        self.g_f.adiciona_vertice("C")
+        self.g_f.adiciona_vertice("D")
+        self.g_f.adiciona_vertice("E")
+        self.g_f.adiciona_vertice("F")
+        self.g_f.adiciona_aresta("a1", "A", "D", 3)
+        self.g_f.adiciona_aresta("a2", "B", "A", 2)
+        self.g_f.adiciona_aresta("a3", "B", "D", 4)
+        self.g_f.adiciona_aresta("a4", "C", "A", 2)
+        self.g_f.adiciona_aresta("a41", "C", "D", 4)
+        self.g_f.adiciona_aresta("a5", "D", "F", 1)
+        self.g_f.adiciona_aresta("a6", "E", "D", 3)
+        self.g_f.adiciona_aresta("a7", "E", "F", 5)
+        self.g_f.adiciona_aresta("a71", "F", "B", 1)
+
+        # Grafo negativado
+        self.g_n = MeuGrafo()
+        self.g_n.adiciona_vertice("A")
+        self.g_n.adiciona_vertice("B")
+        self.g_n.adiciona_vertice("C")
+        self.g_n.adiciona_aresta("a1", "A", "B", 3)
+        self.g_n.adiciona_aresta("a2", "B", "A", 2)
+        self.g_n.adiciona_aresta("a3", "B", "C", -1)
+
     def test_adiciona_aresta(self):
         self.assertTrue(self.g_p.adiciona_aresta('a10', 'J', 'C'))
         a = ArestaDirecionada("zxc", self.g_p.get_vertice("C"), self.g_p.get_vertice("Z"))
@@ -210,3 +286,70 @@ class TestGrafo(unittest.TestCase):
         with self.assertRaises(VerticeInvalidoError):
             self.g_p.arestas_sobre_vertice('A')
         self.assertEqual(set(self.g_e.arestas_sobre_vertice('D')), {'5', '6', '7', '8'})
+
+    def test_alcancabilidade(self):
+        #matriz de alcançabilidades (dps do warshal): 
+        # g_p -> Grafo da paraiba - print(self.g_p)
+        # g_d3 -> Grafo desconexo - print(self.g_d3)
+        # g_c -> Grafo quase completo(diagonal superior) - print(self.g_c)
+        # g_cc -> Grafo completo - print(self.g_cc)
+        # g_sa -> Sem arestas - print(self.s_sa)
+
+        resultado_g_p = [[0, 1, 1, 0, 0, 0, 0],
+                         [0, 0, 1, 0, 0, 0, 0],
+                         [0, 0, 0, 0, 0, 0, 0],
+                         [0, 1, 1, 0, 0, 0, 0],
+                         [0, 1, 1, 0, 0, 1, 1],
+                         [0, 1, 1, 0, 0, 0, 1],
+                         [0, 0, 0, 0, 0, 0, 0]]
+        
+        resultado_g_d3 = [[1, 1, 0, 0, 0],
+                          [1, 1, 0, 0, 0],
+                          [0, 0, 1, 1, 1],
+                          [0, 0, 1, 1, 1],
+                          [0, 0, 1, 1, 1]]
+        
+        resultado_g_c = [[0, 1, 1, 1],
+                         [0, 0, 1, 1],
+                         [0, 0, 0, 1],
+                         [0, 0, 0, 0,]]
+        
+        resultado_g_cc = [[1, 1, 1, 1],
+                          [1, 1, 1, 1],
+                          [1, 1, 1, 1],
+                          [1, 1, 1, 1,]]
+        
+        resultado_g_sa = [[0, 0, 0],
+                          [0, 0, 0],
+                          [0, 0, 0]]
+        
+        resultado_g_cd = [[1, 1, 1],
+                          [1, 1, 1],
+                          [1, 1, 1]]
+    
+        
+        self.assertEqual(self.g_p.warshall(), resultado_g_p)
+        self.assertEqual(self.g_d3.warshall(), resultado_g_d3)
+        self.assertEqual(self.g_c.warshall(), resultado_g_c)
+        self.assertEqual(self.g_cc.warshall(), resultado_g_cc)
+        self.assertEqual(self.g_sa.warshall(), resultado_g_sa)
+        self.assertEqual(self.g_cd.warshall(), resultado_g_cd)
+        
+    def test_menor_caminho(self):
+        INF = 10 ** 9
+
+        self.assertEqual(self.g_f.menor_caminho("A", "E"), (["E"], INF))
+        self.assertEqual(self.g_f.menor_caminho("C", "B"), (["C", "D", "F", "B"], 6))
+        self.assertEqual(len(self.g_sa.menor_caminho("A", "C")[0]), 1)
+        self.assertEqual(self.g_sa.menor_caminho("A", "C")[1], INF)
+        self.assertEqual(self.g_cc.menor_caminho("A", "C"), (["A", "C"], 1))
+
+        with self.assertRaises(VerticeInvalidoError):
+            self.g_c.menor_caminho("A", "E") # Não tem o vertice A
+        
+        with self.assertRaises(VerticeInvalidoError):
+            self.g_c.menor_caminho("J", "A") # Sem o vertice A
+
+        with self.assertRaises(MatrizInvalidaError):
+            self.g_n.menor_caminho("A", "C") # Possui aresta negativa
+            
