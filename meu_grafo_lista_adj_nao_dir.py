@@ -176,19 +176,20 @@ class MeuGrafo(GrafoListaAdjacenciaNaoDirecionado):
 
         grafo = self.cria_grafoAdj()
 
-        visitados = set();
+        visitados = set()
+        cores = dict()
 
         for v in grafo.keys():
             if v not in visitados:
                 fila = list()
                 fila.append(v)
 
-                cores = dict()
+                visitados.add(fila[0])
+                
                 cores[fila[0]] = "branco"
                 
                 while fila:
                     vertice = fila.pop(0)
-                    visitados.add(vertice)
 
                     for v in grafo[vertice]:
                         if v not in visitados:
@@ -203,4 +204,4 @@ class MeuGrafo(GrafoListaAdjacenciaNaoDirecionado):
                         elif cores[v] == cores[vertice]:
                             return False; 
             
-                return True
+        return True

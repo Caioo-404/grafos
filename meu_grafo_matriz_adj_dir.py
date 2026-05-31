@@ -102,7 +102,7 @@ class MeuGrafo(GrafoMatrizAdjacenciaDirecionado):
         # Preparação 
         INF = 10 ** 9
         grafo = self.matriz
-        # dict com o rótulo e o índice do vertice na matriz {'A': 0, 'B': 1}
+        # rótulo - índice do vertice na matriz {'A': 0, 'B': 1}
         mapa_indices = {v.rotulo: i for i, v in enumerate(self.vertices)}
 
         # rotulo - distancia
@@ -132,14 +132,14 @@ class MeuGrafo(GrafoMatrizAdjacenciaDirecionado):
                     if rotVizinho in visitados:
                         continue
                     
-                    #indice 0 pois é um dict de arestas, mas so vou ter 1 aresta (grafo sem paralelas)
-                    aresta = list(grafo[index_vertAtual][vizinho].values())[0]
-                    nova_dist = dist + aresta.peso
+                    #for para grafo com paralelas)
+                    for aresta in grafo[index_vertAtual][vizinho].values():
+                        nova_dist = dist + aresta.peso
 
-                    if nova_dist < distancias[rotVizinho]:
-                        distancias[rotVizinho] = nova_dist
-                        antecessores[rotVizinho] = vert
-                        heapq.heappush(fila, (nova_dist, rotVizinho))
+                        if nova_dist < distancias[rotVizinho]:
+                            distancias[rotVizinho] = nova_dist
+                            antecessores[rotVizinho] = vert
+                            heapq.heappush(fila, (nova_dist, rotVizinho))
 
         # Fazendo lista com menor caminho vi - vf
         menor_vi_vf = list(vf)
@@ -155,7 +155,3 @@ class MeuGrafo(GrafoMatrizAdjacenciaDirecionado):
         # rotulo, distancia e previous
         # nao_visitados = list([a.rotulo, ] for a in self.vertices)
 
-
-
-                    
-        

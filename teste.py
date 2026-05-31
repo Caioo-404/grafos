@@ -2,6 +2,7 @@ from bibgrafo.grafo_lista_adj_nao_dir import GrafoListaAdjacenciaNaoDirecionado
 from meu_grafo_lista_adj_nao_dir import *
 
 graph = MeuGrafo()
+print(MeuGrafo.ha_ciclo(graph))
 graph.adiciona_vertice("1")
 graph.adiciona_vertice("4")
 graph.adiciona_vertice("3")

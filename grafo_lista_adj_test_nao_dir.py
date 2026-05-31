@@ -75,6 +75,70 @@ class TestGrafo(unittest.TestCase):
         # Grafo p\teste de remoção em casta
         self.g_r = GrafoBuilder().tipo(MeuGrafo()).vertices(2).arestas(1).build()
 
+        # Grafo sem aresta
+        self.g_sa = MeuGrafo()
+        self.g_sa.adiciona_vertice("A")
+        self.g_sa.adiciona_vertice("B")
+        self.g_sa.adiciona_vertice("C")
+
+        # Grafo triangulo
+        self.g_tr = MeuGrafo()
+        self.g_tr.adiciona_vertice("A")
+        self.g_tr.adiciona_vertice("B")
+        self.g_tr.adiciona_vertice("C")
+        self.g_tr.adiciona_aresta("a1","A", "B")
+        self.g_tr.adiciona_aresta("a2","B", "C")
+        self.g_tr.adiciona_aresta("a3","C", "A")
+
+
+        #Grafo desconexo
+        self.g_d3 = MeuGrafo()
+        self.g_d3.adiciona_vertice("A")
+        self.g_d3.adiciona_vertice("B")
+        self.g_d3.adiciona_vertice("C")
+        self.g_d3.adiciona_vertice("D")
+        self.g_d3.adiciona_vertice("E")
+        self.g_d3.adiciona_aresta('a1', 'A', 'B')
+        self.g_d3.adiciona_aresta('a3', 'C', 'D')
+        self.g_d3.adiciona_aresta('a4', 'E', 'D')
+        self.g_d3.adiciona_aresta('a5', 'E', 'C')
+
+        # Paralela
+        self.g_pp = MeuGrafo()
+        self.g_pp.adiciona_vertice("A")
+        self.g_pp.adiciona_vertice("B")
+        self.g_pp.adiciona_aresta('a1', 'A', 'B')
+        self.g_pp.adiciona_aresta('a2', 'B', 'A')
+
+        # Grafo com 1 vertice
+        self.g_um = MeuGrafo()
+        self.g_um.adiciona_vertice("A")
+
+        # grafo simples
+        self.g_ss = MeuGrafo()
+        self.g_ss.adiciona_vertice("C")
+        self.g_ss.adiciona_vertice("A")
+        self.g_ss.adiciona_vertice("I")
+        self.g_ss.adiciona_vertice("O")
+        self.g_ss.adiciona_vertice("S")
+        self.g_ss.adiciona_aresta("a1", "C", "A")
+        self.g_ss.adiciona_aresta("a2", "A", "I")
+        self.g_ss.adiciona_aresta("a3", "I", "O")
+        self.g_ss.adiciona_aresta("a4", "I", "S")
+
+        # Grafo reto
+        self.g_reto = MeuGrafo()
+        self.g_reto.adiciona_vertice("Q")
+        self.g_reto.adiciona_vertice("W")
+        self.g_reto.adiciona_vertice("E")
+        self.g_reto.adiciona_vertice("R")
+        self.g_reto.adiciona_vertice("T")
+        self.g_reto.adiciona_aresta("a1", "Q", "W")
+        self.g_reto.adiciona_aresta("a2", "W", "E")
+        self.g_reto.adiciona_aresta("a3", "E", "R")
+        self.g_reto.adiciona_aresta("a4", "R", "T")
+
+
     def test_adiciona_aresta(self):
         self.assertTrue(self.g_p.adiciona_aresta('a10', 'J', 'C'))
         a = Aresta("zxc", self.g_p.get_vertice("C"), self.g_p.get_vertice("Z"))
@@ -194,12 +258,33 @@ class TestGrafo(unittest.TestCase):
         self.assertFalse((self.g_d.eh_completo()))
         self.assertFalse((self.g_d2.eh_completo()))
 
+
     def test_ha_ciclo(self):
-        pass
+        self.assertTrue(self.g_p_sem_paralelas.ha_ciclo()) #possui ciclo
+        self.assertTrue(self.g_c.ha_ciclo())
+        self.assertTrue(self.g_d3.ha_ciclo())
+        self.assertFalse(self.g_sa.ha_ciclo())
+        self.assertFalse(self.g_d.ha_ciclo())
+        self.assertTrue(self.g_pp.ha_ciclo())
 
     def test_eh_arvore(self):
-        pass
+        folhas_g_ss = list()
+        folhas_g_ss.append(self.g_ss.get_vertice("O"))
+        folhas_g_ss.append(self.g_ss.get_vertice("S"))
 
+        self.assertFalse(self.g_p_sem_paralelas.eh_arvore()) #possui ciclo
+        self.assertFalse(self.g_sa.eh_arvore()) # desconexo
+        self.assertEqual(self.g_um.eh_arvore(), (self.g_um.vertices[0], [])) # um vertice
+        self.assertEqual((self.g_ss.eh_arvore()[0], len(self.g_ss.eh_arvore()[1])), (self.g_ss.vertices[0], 2))
+        self.assertEqual(self.g_ss.eh_arvore(), (self.g_ss.get_vertice("C"), folhas_g_ss))
+        self.assertEqual(self.g_reto.eh_arvore(), (self.g_reto.get_vertice("Q"), [self.g_reto.get_vertice("T")]))
+        
     def test_eh_bipartido(self):
-        pass
+        self.assertTrue(self.g_reto.eh_bipartido()) # linha
+        self.assertFalse(self.g_c.eh_bipartido()) #completo
+        self.assertTrue(self.g_um.eh_bipartido())
+        self.assertFalse(self.g_d3.eh_bipartido())
+        self.assertFalse(self.g_l2.eh_bipartido())
+        self.assertFalse(self.g_tr.eh_bipartido())
+
 

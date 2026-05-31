@@ -151,6 +151,19 @@ class TestGrafo(unittest.TestCase):
         self.g_n.adiciona_aresta("a2", "B", "A", 2)
         self.g_n.adiciona_aresta("a3", "B", "C", -1)
 
+        # Grafo paralelas e laço
+        self.g_pl = MeuGrafo()
+        self.g_pl.adiciona_vertice("A")
+        self.g_pl.adiciona_vertice("B")
+        self.g_pl.adiciona_vertice("C")
+        self.g_pl.adiciona_vertice("D")
+        self.g_pl.adiciona_aresta("a1", "A", "A", 2)
+        self.g_pl.adiciona_aresta("a2", "A", "B", 3)
+        self.g_pl.adiciona_aresta("a3", "B", "C", 4)
+        self.g_pl.adiciona_aresta("a4", "B", "D", 5)
+        self.g_pl.adiciona_aresta("a5", "B", "D", 7)
+        self.g_pl.adiciona_aresta("a6", "C", "D", 6)
+
     def test_adiciona_aresta(self):
         self.assertTrue(self.g_p.adiciona_aresta('a10', 'J', 'C'))
         a = ArestaDirecionada("zxc", self.g_p.get_vertice("C"), self.g_p.get_vertice("Z"))
@@ -340,9 +353,11 @@ class TestGrafo(unittest.TestCase):
 
         self.assertEqual(self.g_f.menor_caminho("A", "E"), (["E"], INF))
         self.assertEqual(self.g_f.menor_caminho("C", "B"), (["C", "D", "F", "B"], 6))
+        self.assertEqual(self.g_f.menor_caminho("E", "E"), (["E"], 0))
         self.assertEqual(len(self.g_sa.menor_caminho("A", "C")[0]), 1)
         self.assertEqual(self.g_sa.menor_caminho("A", "C")[1], INF)
         self.assertEqual(self.g_cc.menor_caminho("A", "C"), (["A", "C"], 1))
+        self.assertEqual(self.g_pl.menor_caminho("A", "D")[1], 8) # Teste paralelas
 
         with self.assertRaises(VerticeInvalidoError):
             self.g_c.menor_caminho("A", "E") # Não tem o vertice A
